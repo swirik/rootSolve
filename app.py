@@ -5,7 +5,7 @@ root = tk.Tk()
 root.title("rootSolve")
 root.geometry("1280x720")
 
-root.mainloop()
+
 root.configure(bg="#1e1e1e")
 
 style = ttk.Style()
@@ -20,3 +20,9 @@ main_frame.pack(fill="both", expand=True)
 
 input_frame = ttk.LabelFrame(main_frame, text="Inputs", padding=15)
 input_frame.grid(row=0, column=0, sticky="n", padx=(0,20))
+
+ttk.Label(input_frame, text="Equation").grid(row=0, column=0, sticky="w", pady=(0, 5))
+user_input_equation = ttk.Entry(input_frame, width=30)
+user_input_equation.grid(row=1, column=0, pady=(0, 15))
+
+root.mainloop()
