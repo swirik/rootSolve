@@ -141,7 +141,7 @@ mono_font = ("Consolas", 11)
 main_frame = ttk.Frame(root, padding=20)
 main_frame.pack(fill="both", expand=True)
 
-input_frame = ttk.LabelFrame(main_frame, text=" Parameters ", padding=15)
+input_frame = ttk.LabelFrame(main_frame, text=" Inputs ", padding=15)
 input_frame.grid(row=0, column=0, sticky="n", padx=(0,20))
 
 ttk.Label(input_frame, text="Method").grid(row=0, column=0, sticky="w")
