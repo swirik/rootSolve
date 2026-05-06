@@ -22,7 +22,7 @@ def hide_g_input(*args):
         label_g.grid_remove()
         user_input_g.grid_remove()
 
-def solve_logic(event=None):
+def solve(event=None):
     try:
         eq_f = user_input_equation.get()
         eq_g = user_input_g.get()
@@ -125,7 +125,7 @@ def a_and_b(equation):
 
 
 root = tk.Tk()
-root.bind('<Return>', solve_logic)
+root.bind('<Return>', solve)
 root.title("rootSolve")
 root.geometry("1200x800")
 root.configure(bg="#1e1e1e")
@@ -166,9 +166,9 @@ user_input_a.grid(row=7, column=0, pady=(0, 10))
 
 ttk.Label(input_frame, text="B (Upper Limit)").grid(row=8, column=0, sticky="w")
 user_input_b = ttk.Entry(input_frame, width=30)
-user_input_b.grid(row=9, column=0, pady=(0, 15))
+user_input_b.grid(row=9, column=0, pady=(0, 15))    
 
-ttk.Button(input_frame, text="CALCULATE", command=solve_logic).grid(row=10, column=0, pady=5, sticky="ew")
+ttk.Button(input_frame, text="CALCULATE", command=solve).grid(row=10, column=0, pady=5, sticky="ew")
 ttk.Button(input_frame, text="EXIT", command=root.destroy).grid(row=11, column=0, pady=5, sticky="ew")
 
 results_container = ttk.LabelFrame(main_frame, text=" Output ", padding=15)
