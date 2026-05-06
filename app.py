@@ -6,9 +6,8 @@ import math
 def f(eq, val):
     conversion = {
         "x": val,  # key:value pairs
-        "exp": math.exp, 
         "log": math.log, 
-        "sqrt": math.sqrt}
+        "sqrt": math.sqrt }
     return eval(eq.replace("^", "**"), conversion)
 
 def get_f_prime(eq, x): 
@@ -161,18 +160,18 @@ user_input_equation.grid(row=3, column=0, pady=(0, 10))
 label_g = ttk.Label(input_frame, text="g(x)")
 user_input_g = ttk.Entry(input_frame, width=30)
 
-ttk.Label(input_frame, text="A (Start)").grid(row=6, column=0, sticky="w")
+ttk.Label(input_frame, text="A (Lower Limit)").grid(row=6, column=0, sticky="w")
 user_input_a = ttk.Entry(input_frame, width=30)
 user_input_a.grid(row=7, column=0, pady=(0, 10))
 
-ttk.Label(input_frame, text="B (End)").grid(row=8, column=0, sticky="w")
+ttk.Label(input_frame, text="B (Upper Limit)").grid(row=8, column=0, sticky="w")
 user_input_b = ttk.Entry(input_frame, width=30)
 user_input_b.grid(row=9, column=0, pady=(0, 15))
 
 ttk.Button(input_frame, text="CALCULATE", command=solve_logic).grid(row=10, column=0, pady=5, sticky="ew")
 ttk.Button(input_frame, text="EXIT", command=root.destroy).grid(row=11, column=0, pady=5, sticky="ew")
 
-results_container = ttk.LabelFrame(main_frame, text=" Output Log ", padding=15)
+results_container = ttk.LabelFrame(main_frame, text=" Output ", padding=15)
 results_container.grid(row=0, column=1, sticky="nsew")
 main_frame.columnconfigure(1, weight=1)
 
