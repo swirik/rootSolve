@@ -6,11 +6,15 @@ import math
 def f(eq, val):
     conversion = {
         "x": val,  # key:value pairs
-        "log": math.log, 
+        "log": math.log,
+        "exp": math.exp,
+        "sin": math.sin,
+        "cos": math.cos,
+        "tan": math.tan,
         "sqrt": math.sqrt }
     return eval(eq.replace("^", "**"), conversion)
 
-def get_f_prime(eq, x): 
+def derive(eq, x): 
     h = 1e-7 # approximation to up to 6-7 decimal places
     return (f(eq, x + h) - f(eq, x)) / h # derive
 
@@ -46,8 +50,12 @@ def solve(event=None):
 
         curr_a, curr_b = a, b
         x_val = (a + b) / 2
+        res_val = 0
 
-        for n in range(1, 25):
+        for n in range(1, 26):
+            conv_val = 1.0
+            row_output = ""
+
             if method == "Bisection":
                 c = (curr_a + curr_b) / 2
                 fc = f(eq_f, c)
@@ -55,15 +63,17 @@ def solve(event=None):
                 if f(eq_f, curr_a) * fc < 0: curr_b = c
                 else: curr_a = c
                 conv_val = fc
+                res_val = c
 
             elif method == "Secant":
                 fa, fb = f(eq_f, curr_a), f(eq_f, curr_b)
-                if fb - fa == 0: break
+                if abs(fb - fa) < 1e-12: break
                 c = curr_b - (fb * (curr_b - curr_a)) / (fb - fa)
                 fc = f(eq_f, c)
                 row_output = f"{n:<5} {curr_a:<10.4f} {curr_b:<10.4f} {c:<10.4f} {fc:<10.4f}"
                 curr_a, curr_b = curr_b, c
                 conv_val = fc
+                res_val = c
 
             elif method == "Fixed Point":
                 if not eq_g:
@@ -74,34 +84,39 @@ def solve(event=None):
                     messagebox.showwarning("Warning", f"|g'(x)| = {abs(dg):.4f} >= 1. May diverge.")
                 x_new = f(eq_g, x_val)
                 row_output = f"{n:<5} {x_val:<10.4f} {f(eq_f, x_val):<10.4f} {x_new:<10.4f}"
-                conv_val = f(eq_f, x_new)
+                conv_val = x_new - x_val
+                res_val = x_new
                 x_val = x_new
 
             elif method == "False Position":
                 fa, fb = f(eq_f, curr_a), f(eq_f, curr_b)
+                if abs(fb - fa) < 1e-12: break
                 c = (curr_a * fb - curr_b * fa) / (fb - fa)
                 fc = f(eq_f, c)
                 row_output = f"{n:<5} {curr_a:<10.4f} {curr_b:<10.4f} {c:<10.4f} {fc:<10.4f}"
                 if fa * fc < 0: curr_b = c
                 else: curr_a = c
                 conv_val = fc
+                res_val = c
 
             elif method == "Newton Raphson":
                 fx = f(eq_f, x_val)
-                dfx = get_f_prime(eq_f, x_val)
-                if dfx == 0: break
+                dfx = derive(eq_f, x_val)
+                if abs(dfx) < 1e-12: break
                 x_new = x_val - (fx / dfx)
                 row_output = f"{n:<5} {x_val:<10.4f} {fx:<10.4f} {x_new:<10.4f}"
                 conv_val = fx
+                res_val = x_new
                 x_val = x_new
 
             ttk.Label(results_inner_frame, text=row_output, font=mono_font).grid(column=0, row=n, sticky="w")
             
-            if abs(conv_val) < 0.0005:
-                res_val = x_val if method in ["Fixed Point", "Newton Raphson"] else c
+            if abs(conv_val) < 0.0001:
                 root_msg = f"Root is approximately: {res_val:.4f}"
                 ttk.Label(results_inner_frame, text=root_msg, font=("Consolas", 11, "bold"), foreground="#afff33").grid(column=0, row=n+2, sticky="w")
                 break
+        else:
+            ttk.Label(results_inner_frame, text="Did not converge in 25 iterations", foreground="orange").grid(column=0, row=30, sticky="w")
 
     except Exception as e:
         messagebox.showerror("Math Error", str(e))
@@ -115,7 +130,7 @@ def a_and_b(equation):
         a, b = float(av), float(bv)
         if methods.get() in ["Bisection", "False Position"]:
             if f(equation, a) * f(equation, b) >= 0:
-                messagebox.showerror("Error", "f(a) and f(b) must have opposite signs!")
+                messagebox.showerror("Error", "Math Error!")
                 return False, 0, 0
         return True, a, b
     except ValueError:
